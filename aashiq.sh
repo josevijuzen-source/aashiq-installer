@@ -6,8 +6,8 @@ while true; do
   echo "        AASHIQ INSTALLER"
   echo "==============================="
   echo
-  echo "[1] Install Panel (Direct)"
-  echo "[2] Install Wings (Direct)"
+  echo "[1] Install Panel"
+  echo "[2] Install Wings"
   echo "[3] Uninstall Panel / Wings"
   echo "[0] Exit"
   echo
@@ -16,18 +16,18 @@ while true; do
 
   case "$choice" in
     1)
-      echo "Starting panel installation..."
-      curl -fsSL https://raw.githubusercontent.com/josevijuzen-source/aashiq-installer/main/install-panel.sh | bash
+      echo "Starting Panel Installer..."
+      bash <(curl -fsSL https://pterodactyl-installer.se) panel
       read -p "Press ENTER to return to menu..."
       ;;
     2)
-      echo "Starting wings installation..."
-      curl -fsSL https://raw.githubusercontent.com/josevijuzen-source/aashiq-installer/main/install-wings.sh | bash
+      echo "Starting Wings Installer..."
+      bash <(curl -fsSL https://pterodactyl-installer.se) wings
       read -p "Press ENTER to return to menu..."
       ;;
     3)
-      echo "Uninstalling..."
-      curl -fsSL https://raw.githubusercontent.com/josevijuzen-source/aashiq-installer/main/uninstall.sh | bash
+      echo "Starting Uninstall..."
+      bash <(curl -fsSL https://pterodactyl-installer.se) uninstall
       read -p "Press ENTER to return to menu..."
       ;;
     0)
