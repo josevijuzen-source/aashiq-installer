@@ -1,67 +1,63 @@
-
 #!/bin/bash
 set -e
 
 echo "=============================="
-echo " AASHIQ | WINGS INSTALLER"
+echo " Installing PterODACTYL WINGS "
 echo "=============================="
 
-# Update system
-apt update -y
-apt install -y ca-certificates curl gnupg lsb-release
+# 1. Update system
+apt update -y && apt upgrade -y
 
-# Remove old docker if exists
-apt remove -y docker docker-engine docker.io containerd runc || true
+# 2. Install required packages
+apt install -y curl ca-certificates gnupg lsb-release
 
-# Docker GPG
-mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+# 3. Install Docker
+if ! command -v docker &> /dev/null; then
+  curl -fsSL https://get.docker.com | bash
+fi
 
-# ⚠️ FORCE JAMMY (Ubuntu 22.04 repo) – FIX
-echo \
-"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-https://download.docker.com/linux/ubuntu jammy stable" \
-> /etc/apt/sources.list.d/docker.list
+systemctl enable --now docker
 
-apt update -y
-
-# Install Docker
-apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-
-# Enable Docker
-systemctl enable docker
-systemctl start docker
-
-# Test Docker
-docker run hello-world
-
-# Install Wings
+# 4. Install Wings binary
 mkdir -p /etc/pterodactyl
 curl -L -o /usr/local/bin/wings https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_amd64
 chmod +x /usr/local/bin/wings
 
-# Create service
-cat > /etc/systemd/system/wings.service <<EOF
+# 5. Create systemd service
+cat > /etc/systemd/system/wings.service << 'EOF'
 [Unit]
-Description=Pterodactyl Wings
+Description=Pterodactyl Wings Daemon
 After=docker.service
 Requires=docker.service
 
 [Service]
 User=root
 WorkingDirectory=/etc/pterodactyl
+LimitNOFILE=4096
 ExecStart=/usr/local/bin/wings
 Restart=on-failure
-LimitNOFILE=4096
+StartLimitInterval=180
+StartLimitBurst=30
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
+# 6. Reload systemd
+systemctl daemon-reexec
 systemctl daemon-reload
 systemctl enable wings
 
+echo ""
 echo "=============================="
-echo " Wings installed successfully"
-echo " Next: Configure node in panel"
+echo " Wings installed successfully "
 echo "=============================="
+echo ""
+echo "NEXT STEP:"
+echo "→ Go to PANEL > Nodes > Configuration"
+echo "→ Copy the Wings config"
+echo "→ Paste it into:"
+echo "   nano /etc/pterodactyl/config.yml"
+echo ""
+echo "Then run:"
+echo "systemctl start wings"
