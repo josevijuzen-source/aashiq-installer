@@ -16,8 +16,12 @@ while true; do
 
   case "$choice" in
     1)
-      echo "Install Panel selected"
-      ;;
+  echo "Installing Pterodactyl Panel..."
+  curl -fsSL https://raw.githubusercontent.com/josevijuzen-source/aashiq-installer/main/install-panel.sh \
+    | bash
+  read -p "Press ENTER to return to menu..."
+  ;;
+
     2)
       echo "Install Wings selected"
       ;;
