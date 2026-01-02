@@ -2,12 +2,12 @@
 
 while true; do
   clear
-  echo "================================="
+  echo "==============================="
   echo "        AASHIQ INSTALLER"
-  echo "================================="
+  echo "==============================="
   echo
-  echo "[1] Install Panel"
-  echo "[2] Install Wings"
+  echo "[1] Install Panel (Direct)"
+  echo "[2] Install Wings (Direct)"
   echo "[3] Uninstall Panel / Wings"
   echo "[0] Exit"
   echo
@@ -16,17 +16,19 @@ while true; do
 
   case "$choice" in
     1)
-  echo "Installing Pterodactyl Panel..."
-  curl -fsSL https://raw.githubusercontent.com/josevijuzen-source/aashiq-installer/main/install-panel.sh \
-    | bash
-  read -p "Press ENTER to return to menu..."
-  ;;
-
+      echo "Starting panel installation..."
+      curl -fsSL https://raw.githubusercontent.com/josevijuzen-source/aashiq-installer/main/install-panel.sh | bash
+      read -p "Press ENTER to return to menu..."
+      ;;
     2)
-      echo "Install Wings selected"
+      echo "Starting wings installation..."
+      curl -fsSL https://raw.githubusercontent.com/josevijuzen-source/aashiq-installer/main/install-wings.sh | bash
+      read -p "Press ENTER to return to menu..."
       ;;
     3)
-      echo "Uninstall selected"
+      echo "Uninstalling..."
+      curl -fsSL https://raw.githubusercontent.com/josevijuzen-source/aashiq-installer/main/uninstall.sh | bash
+      read -p "Press ENTER to return to menu..."
       ;;
     0)
       exit
